@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+
+  ghost:
+    image: ghost:3-alpine
+    restart: always
+    ports:
+      - 2368:2368
+    environment:
+      database__client: mysql
+      database__connection__host: db
+      database__connection__user: ghost
+      database__connection__password: ghostpass
+      database__connection__database: ghost
+    depends_on:
+      - db
+    volumes:
+      - ./ghost:/var/lib/ghost/content
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: ghost
+      MYSQL_USER: ghost
+      MYSQL_PASSWORD: ghostpass
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./mysql:/var/lib/mysql
